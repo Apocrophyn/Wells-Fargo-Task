@@ -1,19 +1,21 @@
 package com.wellsfargo.counselor.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Column;
 import java.util.*;
 
 @Entity
-public class Advisor {
+public class ClientR {
 
     @Id
     @GeneratedValue()
-    private long advisorId;
+    private long clientId;
 
     @Column(nullable = false)
     private String firstName;
@@ -30,24 +32,30 @@ public class Advisor {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "advisor")
-    private List<ClientR> clients;
+    @ManyToOne
+    @JoinColumn(name = "advisorId")
+    private Advisor advisor;
 
-    protected Advisor() {
+    @OneToMany
+    private List<Portfolio> portfolios;
+
+    protected ClientR() {
 
     }
 
-    public Advisor(String firstName, String lastName, String address, String phone, String email,
-            List<ClientR> clients) {
+    public ClientR(String firstName, String lastName, String address, String phone, String email, Advisor advisor,
+            List<Portfolio> portfolios) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phone = phone;
         this.email = email;
+        this.advisor = advisor;
+        this.portfolios = portfolios;
     }
 
-    public Long getAdvisorId() {
-        return advisorId;
+    public Long getClientId() {
+        return clientId;
     }
 
     public String getFirstName() {
@@ -90,11 +98,19 @@ public class Advisor {
         this.email = email;
     }
 
-    public List<ClientR> getClients() {
-        return clients;
+    public Advisor getAdvisor() {
+        return advisor;
     }
 
-    public void setClients(List<ClientR> clients) {
-        this.clients = clients;
+    public void setAdvisor(Advisor advisor) {
+        this.advisor = advisor;
+    }
+
+    public List<Portfolio> getPortfolios() {
+        return portfolios;
+    }
+
+    public void setPortfolios(List<Portfolio> portfolios) {
+        this.portfolios = portfolios;
     }
 }
